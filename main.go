@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/lrf141/gazer/cmd"
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
@@ -9,11 +9,8 @@ import (
 
 func main() {
 	app := cli.App{
-		Name: "gazer",
-		Action: func(context *cli.Context) error {
-			fmt.Println("call this command")
-			return nil
-		},
+		Name:   "gazer",
+		Action: cmd.Execute,
 	}
 	err := app.Run(os.Args)
 	if err != nil {
