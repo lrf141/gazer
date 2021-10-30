@@ -21,7 +21,7 @@ type FspHeader struct {
 	FreeInodes             *ListBaseNode `json:"freeInodes"`
 }
 
-const startPosition = 38
+const fspHeaderStartPosition = 38
 
 func InitFspHeader() *FspHeader {
 	return &FspHeader{
@@ -34,7 +34,7 @@ func InitFspHeader() *FspHeader {
 }
 
 func (fspHeader *FspHeader) ReadHeader(f *os.File) error {
-	if _, err := f.Seek(startPosition, io.SeekStart); err != nil {
+	if _, err := f.Seek(fspHeaderStartPosition, io.SeekStart); err != nil {
 		return err
 	}
 

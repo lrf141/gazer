@@ -2,6 +2,7 @@ package ibd
 
 import (
 	"encoding/binary"
+	"io"
 	"os"
 )
 
@@ -16,11 +17,16 @@ type FilHeader struct {
 	SpaceId                 uint32 `json:"spaceId"`
 }
 
+const filHeaderStartPosition = 0
+
 func InitFilHeader() *FilHeader {
 	return &FilHeader{}
 }
 
 func (filHeader *FilHeader) Read(f *os.File) error {
+	if _, err := f.Seek(filHeaderStartPosition, io.SeekStart); err != nil {
+		return err
+	}
 
 	var checksum uint32
 	if err := binary.Read(f, binary.BigEndian, &checksum); err != nil {
