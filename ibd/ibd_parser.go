@@ -5,12 +5,13 @@ import (
 )
 
 func Parse(f *os.File) error {
-	fspHeader := InitFspHeader()
-	err := fspHeader.ReadHeader(f)
+	tablespace := InitTablespace()
+	err := tablespace.Read(f)
 	if err != nil {
 		return err
 	}
-	err = fspHeader.EncodeToJson()
+
+	err = tablespace.EncodeToJson()
 	if err != nil {
 		return err
 	}

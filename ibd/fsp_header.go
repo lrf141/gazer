@@ -2,7 +2,6 @@ package ibd
 
 import (
 	"encoding/binary"
-	"encoding/json"
 	"io"
 	"os"
 )
@@ -101,13 +100,5 @@ func (fspHeader *FspHeader) ReadHeader(f *os.File) error {
 		return err
 	}
 
-	return nil
-}
-
-func (fspHeader *FspHeader) EncodeToJson() error {
-	encoder := json.NewEncoder(os.Stdout)
-	if err := encoder.Encode(fspHeader); err != nil {
-		return err
-	}
 	return nil
 }
