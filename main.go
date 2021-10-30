@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	app := cli.App{
+	app := &cli.App{
 		Name:   "gazer",
 		Action: cmd.Execute,
 	}
