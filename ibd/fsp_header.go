@@ -14,8 +14,8 @@ type FspHeader struct {
 	Flags                  uint32        `json:"flags"`
 	FreeFlagUsedListNumber uint32        `json:"freeFlagUsedListNumber"`
 	Free                   *ListBaseNode `json:"free"`
-	FreeFlag               *ListBaseNode `json:"freeFlag"`
-	FullFlag               *ListBaseNode `json:"fullFlag"`
+	FreeFrag               *ListBaseNode `json:"freeFrag"`
+	FullFrag               *ListBaseNode `json:"fullFrag"`
 	NextUnusedSegmentId    uint64        `json:"nextUnusedSegmentId"`
 	FullInodes             *ListBaseNode `json:"fullInodes"`
 	FreeInodes             *ListBaseNode `json:"freeInodes"`
@@ -26,8 +26,8 @@ const startPosition = 38
 func InitFspHeader() *FspHeader {
 	return &FspHeader{
 		Free:       InitListBaseNode(),
-		FreeFlag:   InitListBaseNode(),
-		FullFlag:   InitListBaseNode(),
+		FreeFrag:   InitListBaseNode(),
+		FullFrag:   InitListBaseNode(),
 		FullInodes: InitListBaseNode(),
 		FreeInodes: InitListBaseNode(),
 	}
@@ -78,11 +78,11 @@ func (fspHeader *FspHeader) ReadHeader(f *os.File) error {
 		return err
 	}
 
-	if err := fspHeader.FreeFlag.Read(f); err != nil {
+	if err := fspHeader.FreeFrag.Read(f); err != nil {
 		return err
 	}
 
-	if err := fspHeader.FullFlag.Read(f); err != nil {
+	if err := fspHeader.FullFrag.Read(f); err != nil {
 		return err
 	}
 
