@@ -6,17 +6,24 @@ import (
 )
 
 type Tablespace struct {
-	FspHeader *FspHeader `json:"FspHeader"`
+	FilHeader *FilHeader `json:"filHeader"`
+	FspHeader *FspHeader `json:"fspHeader"`
 }
 
 func InitTablespace() *Tablespace {
 	return &Tablespace{
+		FilHeader: InitFilHeader(),
 		FspHeader: InitFspHeader(),
 	}
 }
 
 func (tablespace *Tablespace) Read(f *os.File) error {
-	err := tablespace.FspHeader.ReadHeader(f)
+	err := tablespace.FilHeader.Read(f)
+	if err != nil {
+		return err
+	}
+
+	err = tablespace.FspHeader.ReadHeader(f)
 	if err != nil {
 		return err
 	}
