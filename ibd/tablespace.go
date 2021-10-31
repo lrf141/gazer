@@ -2,19 +2,22 @@ package ibd
 
 import (
 	"encoding/json"
+	"io"
 	"os"
 )
 
 type Tablespace struct {
-	FilHeader *FilHeader `json:"filHeader"`
-	FspHeader *FspHeader `json:"fspHeader"`
-	Xdes      []*Xdes      `json:"xdes"`
+	FilHeader  *FilHeader  `json:"filHeader"`
+	FspHeader  *FspHeader  `json:"fspHeader"`
+	Xdes       []*Xdes     `json:"xdes"`
+	FilTrailer *FilTrailer `json:"filTrailer"`
 }
 
 func InitTablespace() *Tablespace {
 	return &Tablespace{
-		FilHeader: InitFilHeader(),
-		FspHeader: InitFspHeader(),
+		FilHeader:  InitFilHeader(),
+		FspHeader:  InitFspHeader(),
+		FilTrailer: InitFilTrailer(),
 	}
 }
 
@@ -37,6 +40,16 @@ func (tablespace *Tablespace) Read(f *os.File) error {
 		}
 		tablespace.Xdes = append(tablespace.Xdes, xdes)
 	}
+	_, err = f.Seek(5986, io.SeekCurrent)
+	if err != nil {
+		return err
+	}
+
+	err = tablespace.FilTrailer.Read(f)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
