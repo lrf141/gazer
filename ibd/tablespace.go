@@ -8,12 +8,14 @@ import (
 type Tablespace struct {
 	FilHeader *FilHeader `json:"filHeader"`
 	FspHeader *FspHeader `json:"fspHeader"`
+	Xdes      *Xdes      `json:"xdes"`
 }
 
 func InitTablespace() *Tablespace {
 	return &Tablespace{
 		FilHeader: InitFilHeader(),
 		FspHeader: InitFspHeader(),
+		Xdes:      InitXdes(),
 	}
 }
 
@@ -24,6 +26,11 @@ func (tablespace *Tablespace) Read(f *os.File) error {
 	}
 
 	err = tablespace.FspHeader.ReadHeader(f)
+	if err != nil {
+		return err
+	}
+
+	err = tablespace.Xdes.Read(f)
 	if err != nil {
 		return err
 	}
