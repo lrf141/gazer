@@ -2,7 +2,6 @@ package ibd
 
 import (
 	"encoding/binary"
-	"fmt"
 	"os"
 )
 
@@ -49,7 +48,6 @@ func (xdes *Xdes) Read(f *os.File) error {
 		if err := binary.Read(f, binary.BigEndian, &bitmap); err != nil {
 			return err
 		}
-		fmt.Println(bitmap)
 		for j := 0; j < 8; j += 2 {
 			pageState := InitPageState()
 			pageState.Free = refbit(bitmap, uint8(j))
