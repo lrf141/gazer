@@ -8,14 +8,13 @@ import (
 type Tablespace struct {
 	FilHeader *FilHeader `json:"filHeader"`
 	FspHeader *FspHeader `json:"fspHeader"`
-	Xdes      *Xdes      `json:"xdes"`
+	Xdes      []*Xdes      `json:"xdes"`
 }
 
 func InitTablespace() *Tablespace {
 	return &Tablespace{
 		FilHeader: InitFilHeader(),
 		FspHeader: InitFspHeader(),
-		Xdes:      InitXdes(),
 	}
 }
 
@@ -30,9 +29,13 @@ func (tablespace *Tablespace) Read(f *os.File) error {
 		return err
 	}
 
-	err = tablespace.Xdes.Read(f)
-	if err != nil {
-		return err
+	for i := 0; i < 256; i++ {
+		xdes := InitXdes()
+		err = xdes.Read(f)
+		if err != nil {
+			return err
+		}
+		tablespace.Xdes = append(tablespace.Xdes, xdes)
 	}
 	return nil
 }
