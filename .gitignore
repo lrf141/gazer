@@ -36,4 +36,4 @@ build/
 
 # Jetbrains IDE setting file
 .idea/
-
+cmake-build-debug/
